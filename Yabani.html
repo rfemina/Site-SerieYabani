@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming de Séries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">YABANI - Streaming</h1>
+        <div class="accordion mt-4" id="episodeAccordion">
+        </div>
+    </div>
+
+    <script>
+        const episodeAccordion = document.getElementById("episodeAccordion");
+        const title = document.getElementById("title");
+
+        for (let i = 1; i <= 122; i++) {
+            let episodeNumber = String(i).padStart(3, '0');
+            let accordionItem = document.createElement("div");
+            accordionItem.classList.add("accordion-item");
+            
+            accordionItem.innerHTML = `
+                <h2 class="accordion-header" id="heading${i}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
+                        Episódio ${i}
+                    </button>
+                </h2>
+                <div id="collapse${i}" class="accordion-collapse collapse" aria-labelledby="heading${i}" data-bs-parent="#episodeAccordion">
+                    <div class="accordion-body">
+                        <h3>YABANI - Episódio ${i}</h3>
+                        <video controls width="100%">
+                            <source src="https://techmais.online/series/YABANI/YABANI-${episodeNumber}.mp4" type="video/mp4">
+                            Seu navegador não suporta a reprodução de vídeos.
+                        </video>
+                    </div>
+                </div>
+            `;
+            episodeAccordion.appendChild(accordionItem);
+        }
+    </script>
+</body>
+</html>
