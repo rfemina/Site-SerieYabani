@@ -27,23 +27,54 @@
             width: 100%;
             border-radius: 10px;
         }
+        .watched-list {
+            margin-top: 20px;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="title">YABANI - Streaming</h1>
-        <div class="accordion mt-4" id="episodeAccordion">
-        </div>
+        <div class="accordion mt-4" id="episodeAccordion"></div>
+        <h2 class="mt-4">Episódios Assistidos</h2>
+        <div class="accordion mt-4 watched-list" id="watchedEpisodes"></div>
     </div>
 
     <script>
         const episodeAccordion = document.getElementById("episodeAccordion");
+        const watchedEpisodes = document.getElementById("watchedEpisodes");
         const title = document.getElementById("title");
+        let watchedList = [];
+
+        function updateAccordion(ep) {
+            document.querySelectorAll('.accordion-collapse').forEach(collapse => collapse.classList.remove('show'));
+            const targetCollapse = document.getElementById(`collapse${ep}`);
+            if (targetCollapse) {
+                targetCollapse.classList.add('show');
+                title.innerText = `YABANI - Episódio ${ep}`;
+            }
+        }
+
+        function markAsWatched(ep, checkbox) {
+            const episodeElement = document.getElementById(`episode${ep}`);
+            if (checkbox.checked) {
+                watchedList.push(ep);
+                watchedList.sort((a, b) => a - b);
+                watchedEpisodes.appendChild(episodeElement);
+            } else {
+                watchedList = watchedList.filter(e => e !== ep);
+                episodeAccordion.appendChild(episodeElement);
+            }
+        }
 
         for (let i = 1; i <= 122; i++) {
             let episodeNumber = String(i).padStart(3, '0');
             let accordionItem = document.createElement("div");
             accordionItem.classList.add("accordion-item");
+            accordionItem.id = `episode${i}`;
             
             accordionItem.innerHTML = `
                 <h2 class="accordion-header" id="heading${i}">
@@ -58,6 +89,14 @@
                             <source src="https://techmais.online/series/YABANI/YABANI-${episodeNumber}.mp4" type="video/mp4">
                             Seu navegador não suporta a reprodução de vídeos.
                         </video>
+                        <div class="d-flex justify-content-between mt-3">
+                            <button class="btn btn-secondary" onclick="updateAccordion(${i - 1})" ${i === 1 ? 'disabled' : ''}>Anterior</button>
+                            <button class="btn btn-secondary" onclick="updateAccordion(${i + 1})" ${i === 122 ? 'disabled' : ''}>Próximo</button>
+                        </div>
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="watched${i}" onchange="markAsWatched(${i}, this)">
+                            <label class="form-check-label" for="watched${i}">Marcar como assistido</label>
+                        </div>
                     </div>
                 </div>
             `;
